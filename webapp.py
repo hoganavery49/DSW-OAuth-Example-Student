@@ -30,7 +30,9 @@ github = oauth.remote_app(
     authorize_url='https://github.com/login/oauth/authorize' #URL for github's OAuth login
 )
 
-
+#contect processors run before templates are rendered and add variablesw to the template's context
+#must return a dictionary
+#this context processor adds the variable logged_in to the context for all templates
 @app.context_processor
 def inject_logged_in():
     return {"logged_in":('github_token' in session)}
@@ -80,6 +82,7 @@ def renderPage1():
 def renderPage2():
     return render_template('page2.html')
 
+#tokengetter is automatically called to check who is logged into the session
 @github.tokengetter
 def get_github_oauth_token():
     return session.get('github_token')
